@@ -20,6 +20,7 @@ import {
   getAndroidUpdateFilesContentOptions,
   getIosFoldersAndFilesPaths,
   getIosUpdateFilesContentOptions,
+  getMacosFoldersAndFilesPaths,
   getOtherUpdateFilesContentOptions,
   iosAppDelegate,
   iosXcodeproj,
@@ -289,6 +290,20 @@ export const renameIosFoldersAndFiles = async newPathContentStr => {
   });
 };
 
+export const renameMacosFoldersAndFiles = async newPathContentStr => {
+    const currentPathContentStr = getMacosXcodeProjectPathName();
+    const foldersAndFilesPaths = getMacosFoldersAndFilesPaths({
+      currentPathContentStr,
+      newPathContentStr,
+    });
+
+    await renameFoldersAndFiles({
+      foldersAndFilesPaths,
+      currentPath: cleanString(currentPathContentStr),
+      newPath: cleanString(newPathContentStr),
+    });
+  };
+
 export const updateFilesContent = async filesContentOptions => {
   const promises = filesContentOptions.map(async (option, index) => {
     await delay(index * PROMISE_DELAY);
@@ -325,19 +340,21 @@ export const updateFilesContent = async filesContentOptions => {
   await Promise.all(promises);
 };
 
-export const updateIosFilesContent = async ({
+export const updateAppleFilesContent = async ({
   currentName,
   newName,
   currentPathContentStr,
   newPathContentStr,
   newBundleID,
+  platform,
 }) => {
-  const filesContentOptions = getIosUpdateFilesContentOptions({
+  const filesContentOptions = getAppleUpdateFilesContentOptions({
     currentName,
     newName,
     currentPathContentStr,
     newPathContentStr,
     newBundleID,
+    platform,
   });
   await updateFilesContent(filesContentOptions);
 };

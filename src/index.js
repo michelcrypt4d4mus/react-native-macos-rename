@@ -84,12 +84,13 @@ program
     const currentAndroidBundleID = getAndroidCurrentBundleID();
 
     await renameIosFoldersAndFiles(newPathContentStr);
-    await updateIosFilesContent({
+    await updateAppleFilesContent({
       currentName: currentIosName,
       newName,
       currentPathContentStr,
       newPathContentStr,
       newBundleID: newIosBundleID || newBundleID,
+      platform: 'ios',
     });
 
     await updateIosNameInInfoPlist(newName);
