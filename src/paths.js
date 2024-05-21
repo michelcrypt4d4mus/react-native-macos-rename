@@ -3,13 +3,13 @@ import { cleanString, encodeXmlEntities } from './utils';
 export const androidManifestXml = 'android/app/src/main/AndroidManifest.xml';
 export const androidValuesStrings = 'android/app/src/main/res/values/strings.xml';
 export const androidJava = 'android/app/src/*/java';
-export const iosXcodeproj = 'ios/*.xcodeproj';
-export const iosPbxProject = 'ios/*.xcodeproj/project.pbxproj';
-export const iosAppDelegate = 'ios/*/AppDelegate.h';
+export const iosXcodeproj = 'macos/*.xcodeproj';
+export const iosPbxProject = 'macos/*.xcodeproj/project.pbxproj';
+export const iosAppDelegate = 'macos/*/AppDelegate.h';
 export const appJson = 'app.json';
 export const packageJson = 'package.json';
 export const buildPaths = [
-  'ios/build/*',
+  'macos/build/*',
   'android/.gradle/*',
   'android/app/build/*',
   'android/build/*',
@@ -19,18 +19,18 @@ export const getIosFoldersAndFilesPaths = ({ currentPathContentStr, newPathConte
   const cleanNewPathContentStr = cleanString(newPathContentStr);
 
   return [
-    `ios/${currentPathContentStr}`,
-    `ios/${cleanNewPathContentStr}/${currentPathContentStr}.entitlements`,
-    `ios/${cleanNewPathContentStr}/${currentPathContentStr}Release.entitlements`,
-    `ios/${currentPathContentStr}-tvOS`,
-    `ios/${currentPathContentStr}-tvOSTests`,
-    `ios/${currentPathContentStr}.xcworkspace`,
-    `ios/${currentPathContentStr}Tests`,
-    `ios/${cleanNewPathContentStr}Tests/${currentPathContentStr}Tests.m`,
-    `ios/${currentPathContentStr}.xcodeproj`,
-    `ios/${cleanNewPathContentStr}.xcodeproj/xcshareddata/xcschemes/${currentPathContentStr}-tvOS.xcscheme`,
-    `ios/${cleanNewPathContentStr}.xcodeproj/xcshareddata/xcschemes/${currentPathContentStr}.xcscheme`,
-    `ios/${currentPathContentStr}-Bridging-Header.h`,
+    `macos/${currentPathContentStr}`,
+    `macos/${cleanNewPathContentStr}/${currentPathContentStr}.entitlements`,
+    `macos/${cleanNewPathContentStr}/${currentPathContentStr}Release.entitlements`,
+    `macos/${currentPathContentStr}-tvOS`,
+    `macos/${currentPathContentStr}-tvOSTests`,
+    `macos/${currentPathContentStr}.xcworkspace`,
+    `macos/${currentPathContentStr}Tests`,
+    `macos/${cleanNewPathContentStr}Tests/${currentPathContentStr}Tests.m`,
+    `macos/${currentPathContentStr}.xcodeproj`,
+    `macos/${cleanNewPathContentStr}.xcodeproj/xcshareddata/xcschemes/${currentPathContentStr}-tvOS.xcscheme`,
+    `macos/${cleanNewPathContentStr}.xcodeproj/xcshareddata/xcschemes/${currentPathContentStr}.xcscheme`,
+    `macos/${currentPathContentStr}-Bridging-Header.h`,
   ];
 };
 
@@ -47,7 +47,7 @@ export const getIosUpdateFilesContentOptions = ({
 
   return [
     {
-      files: 'ios/Podfile',
+      files: 'macos/Podfile',
       from: [
         new RegExp(`\\b${currentPathContentStr}\\b`, 'g'),
         new RegExp(`\\b${currentPathContentStr}Tests\\b`, 'g'),
@@ -55,32 +55,32 @@ export const getIosUpdateFilesContentOptions = ({
       to: [`${cleanNewPathContentStr}`, `${cleanNewPathContentStr}Tests`],
     },
     {
-      files: ['ios/*/AppDelegate.mm', 'ios/*/AppDelegate.m'],
+      files: ['macos/*/AppDelegate.mm', 'macos/*/AppDelegate.m'],
       from: [new RegExp(`@"${currentName}"`, 'g')],
       to: `@"${newName}"`,
     },
     {
       files: [
-        'ios/*.xcodeproj/project.pbxproj',
-        'ios/*.xcworkspace/contents.xcworkspacedata',
-        'ios/*.xcodeproj/xcshareddata/xcschemes/*-tvOS.xcscheme',
-        'ios/*.xcodeproj/xcshareddata/xcschemes/*.xcscheme',
-        'ios/*Tests/*Tests.m',
+        'macos/*.xcodeproj/project.pbxproj',
+        'macos/*.xcworkspace/contents.xcworkspacedata',
+        'macos/*.xcodeproj/xcshareddata/xcschemes/*-tvOS.xcscheme',
+        'macos/*.xcodeproj/xcshareddata/xcschemes/*.xcscheme',
+        'macos/*Tests/*Tests.m',
       ],
       from: [new RegExp(`\\b${currentPathContentStr}\\b`, 'g')],
       to: cleanNewPathContentStr,
     },
     {
       files: [
-        'ios/*.xcodeproj/project.pbxproj',
-        'ios/*Tests/*Tests.m',
-        'ios/*.xcodeproj/xcshareddata/xcschemes/*.xcscheme',
+        'macos/*.xcodeproj/project.pbxproj',
+        'macos/*Tests/*Tests.m',
+        'macos/*.xcodeproj/xcshareddata/xcschemes/*.xcscheme',
       ],
       from: new RegExp(`\\b${currentPathContentStr}Tests\\b`, 'g'),
       to: `${cleanNewPathContentStr}Tests`,
     },
     {
-      files: 'ios/*.xcodeproj/project.pbxproj',
+      files: 'macos/*.xcodeproj/project.pbxproj',
       from: [
         new RegExp(/INFOPLIST_KEY_CFBundleDisplayName = "(.*)"/, 'g'),
         new RegExp(`remoteInfo = ${cleanNewPathContentStr};`, 'gi'),
@@ -133,7 +133,7 @@ export const getIosUpdateFilesContentOptions = ({
       ],
     },
     {
-      files: 'ios/*.xcodeproj/project.pbxproj',
+      files: 'macos/*.xcodeproj/project.pbxproj',
       processor: input => {
         const matchesDisplayName = input.match(/INFOPLIST_KEY_CFBundleDisplayName = "(.*)"/g);
         // If there is no display name, add it
@@ -162,7 +162,7 @@ export const getIosUpdateFilesContentOptions = ({
       },
     },
     {
-      files: 'ios/*/Base.lproj/LaunchScreen.xib',
+      files: 'macos/*/Base.lproj/LaunchScreen.xib',
       from: [
         new RegExp(`\\b${encodedCurrentName}\\b`, 'g'),
         new RegExp(`\\b${currentName}\\b`, 'g'),
@@ -170,7 +170,7 @@ export const getIosUpdateFilesContentOptions = ({
       to: encodedNewName,
     },
     {
-      files: 'ios/*/LaunchScreen.storyboard',
+      files: 'macos/*/LaunchScreen.storyboard',
       from: [
         new RegExp(`text="${encodedCurrentName}"`, 'g'),
         new RegExp(`text="${currentName}"`, 'g'),
